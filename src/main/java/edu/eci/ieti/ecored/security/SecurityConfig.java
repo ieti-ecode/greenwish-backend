@@ -1,7 +1,5 @@
 package edu.eci.ieti.ecored.security;
 
-import edu.eci.ieti.ecored.security.filters.JwtRequestFilter;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -18,12 +16,13 @@ import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import edu.eci.ieti.ecored.security.filters.JwtRequestFilter;
+
 @Configuration
 public class SecurityConfig {
 
     private final JwtRequestFilter jwtRequestFilter;
 
-    @Autowired
     public SecurityConfig(JwtRequestFilter jwtRequestFilter) {
         this.jwtRequestFilter = jwtRequestFilter;
     }
@@ -50,14 +49,16 @@ public class SecurityConfig {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User.withUsername("greenwish")
                 .password("1234")
-                .roles()
+                .roles("ADMIN")
                 .build());
         return manager;
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder) throws Exception {
-        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity.getSharedObject(AuthenticationManagerBuilder.class);
+    public AuthenticationManager authenticationManager(HttpSecurity httpSecurity, PasswordEncoder passwordEncoder)
+            throws Exception {
+        AuthenticationManagerBuilder authenticationManagerBuilder = httpSecurity
+                .getSharedObject(AuthenticationManagerBuilder.class);
         authenticationManagerBuilder.userDetailsService(userDetailsService()).passwordEncoder(passwordEncoder);
         return authenticationManagerBuilder.build();
     }

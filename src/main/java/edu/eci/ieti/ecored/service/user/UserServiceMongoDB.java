@@ -3,10 +3,10 @@ package edu.eci.ieti.ecored.service.user;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.ieti.ecored.controller.user.UserDto;
+import edu.eci.ieti.ecored.exception.UserNotFoundException;
 import edu.eci.ieti.ecored.repository.UserRepository;
 import edu.eci.ieti.ecored.repository.document.User;
 
@@ -15,7 +15,6 @@ public class UserServiceMongoDB implements UserService {
 
     private final UserRepository userRepository;
 
-    @Autowired
     public UserServiceMongoDB(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -42,10 +41,15 @@ public class UserServiceMongoDB implements UserService {
 
     @Override
     public void update(UserDto user, String id) {
-        User userToUpdate = userRepository.findById(id).get();
-        userToUpdate.setName(user.getName());
-        userToUpdate.setEmail(user.getEmail());
-        userToUpdate.setPasswordHash(user.getPassword());
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isPresent()) {
+            User userToUpdate = optionalUser.get();
+            userToUpdate.setName(user.getName());
+            userToUpdate.setEmail(user.getEmail());
+            userToUpdate.setPasswordHash(user.getPassword());
+        } else {
+            throw new UserNotFoundException();
+        }
     }
-    
+
 }

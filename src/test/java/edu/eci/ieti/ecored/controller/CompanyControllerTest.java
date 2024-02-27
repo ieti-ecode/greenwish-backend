@@ -1,9 +1,9 @@
 package edu.eci.ieti.ecored.controller;
 
-import edu.eci.ieti.ecored.Service.CompanyService;
-import edu.eci.ieti.ecored.controller.company.CompanyController;
-import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
-import edu.eci.ieti.ecored.repository.document.Company;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,9 +12,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import edu.eci.ieti.ecored.controller.company.CompanyController;
+import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
+import edu.eci.ieti.ecored.repository.document.Company;
+import edu.eci.ieti.ecored.service.company.CompanyService;
 
 @ExtendWith(MockitoExtension.class)
 public class CompanyControllerTest {
@@ -37,4 +38,5 @@ public class CompanyControllerTest {
         assertNotNull(response.getBody());
         assertEquals("GitHub", response.getBody().getName());
     }
+
 }

@@ -13,9 +13,9 @@ public interface UserService {
     Optional<User> findById(String id);
 
     List<User> all();
-    
+
     void deleteById(String id);
 
     void update(UserDto user, String id);
-    
+
 }

@@ -1,5 +1,15 @@
 package edu.eci.ieti.ecored.security.jwt;
 
+import java.util.Date;
+import java.util.List;
+import java.util.function.Function;
+
+import javax.crypto.SecretKey;
+
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
+
 import edu.eci.ieti.ecored.controller.auth.TokenDto;
 import edu.eci.ieti.ecored.repository.document.User;
 import io.jsonwebtoken.Claims;
@@ -7,18 +17,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.stereotype.Component;
-
-import javax.crypto.SecretKey;
-import java.util.Date;
-import java.util.List;
-import java.util.function.Function;
 
 @Component
-@Slf4j
 @Getter
+@Setter
 @ConfigurationProperties(prefix = "jwt")
 public class JwtUtils {
 

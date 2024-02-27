@@ -1,36 +1,37 @@
-package edu.eci.ieti.ecored.Service;
-
-import edu.eci.ieti.ecored.controller.company.CompanyDto;
-import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
-import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
-import edu.eci.ieti.ecored.repository.CompanyRepository;
-import edu.eci.ieti.ecored.repository.document.Company;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
+package edu.eci.ieti.ecored.service.company;
 
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import edu.eci.ieti.ecored.controller.company.CompanyDto;
+import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
+import edu.eci.ieti.ecored.repository.CompanyRepository;
+import edu.eci.ieti.ecored.repository.document.Company;
+
 @Service
-public class CompanyServiceMongoDB implements CompanyService{
+public class CompanyServiceMongoDB implements CompanyService {
 
     private final CompanyRepository companyRepository;
 
-    public CompanyServiceMongoDB (@Autowired CompanyRepository companyRepository) {
+    public CompanyServiceMongoDB(@Autowired CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
 
     @Override
     public Company create(CompanyDto companyDto) {
-        return companyRepository.save(new Company(companyDto.getName(), companyDto.getPhoneNumber(), companyDto.getAddress()));
+        return companyRepository
+                .save(new Company(companyDto.getName(), companyDto.getPhoneNumber(), companyDto.getAddress()));
     }
 
     @Override
     public Company findById(String id) throws CompanyNotFoundException {
         Optional<Company> optionalCompany = companyRepository.findById(id);
-        if (optionalCompany.isPresent()){
+        if (optionalCompany.isPresent()) {
             return optionalCompany.get();
-        }else {
+        } else {
             throw new CompanyNotFoundException();
         }
     }
@@ -42,7 +43,7 @@ public class CompanyServiceMongoDB implements CompanyService{
 
     @Override
     public boolean deleteById(String id) {
-        if (companyRepository.existsById(id)){
+        if (companyRepository.existsById(id)) {
             companyRepository.deleteById(id);
             return true;
         }
@@ -51,14 +52,14 @@ public class CompanyServiceMongoDB implements CompanyService{
 
     @Override
     public Company update(CompanyDto companyDto, String id) {
-        if (companyRepository.findById(id).isPresent()) {
-            Company company = companyRepository.findById(id).get();
+        Optional<Company> optionalCompany = companyRepository.findById(id);
+        if (optionalCompany.isPresent()) {
+            Company company = optionalCompany.get();
             company.setDescription(companyDto.getDescription());
             company.setName(companyDto.getName());
             company.setAddress(companyDto.getAddress());
             company.setOppeningHours(companyDto.getOppeningHours());
             company.setDescription(companyDto.getDescription());
-
             return company;
         }
         return null;

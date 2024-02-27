@@ -1,10 +1,9 @@
 package edu.eci.ieti.ecored.service;
 
-import edu.eci.ieti.ecored.Service.BenefitServiceMongoDB;
-import edu.eci.ieti.ecored.controller.benefit.BenefitDto;
-import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
-import edu.eci.ieti.ecored.repository.BenefitRepository;
-import edu.eci.ieti.ecored.repository.document.Benefit;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -13,13 +12,15 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import edu.eci.ieti.ecored.controller.benefit.BenefitDto;
+import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
+import edu.eci.ieti.ecored.repository.BenefitRepository;
+import edu.eci.ieti.ecored.repository.document.Benefit;
+import edu.eci.ieti.ecored.service.benefit.BenefitServiceMongoDB;
 
 @SpringBootTest
-//@TestPropertySource(properties = {"spring.data.mongodb.uri=mongodb://localhost/testdb"})
+// @TestPropertySource(properties =
+// {"spring.data.mongodb.uri=mongodb://localhost/testdb"})
 public class BenefitServiceMongoDBTest {
 
     @Mock
@@ -30,11 +31,10 @@ public class BenefitServiceMongoDBTest {
 
     @Test
     @Order(1)
-    public void testFindAllBenefits(){
+    public void testFindAllBenefits() {
         List<Benefit> benefitsListMock = Arrays.asList(
                 new Benefit("Exito", 5000),
-                new Benefit("Carulla", 10000)
-        );
+                new Benefit("Carulla", 10000));
         Mockito.when(benefitRepository.findAll()).thenReturn(benefitsListMock);
         List<Benefit> benefits = benefitServiceMongoDB.all();
         Assertions.assertNotNull(benefits);
@@ -62,4 +62,5 @@ public class BenefitServiceMongoDBTest {
         Assertions.assertNotNull(benefitSaved);
         Assertions.assertEquals("Exito", benefitSaved.getName());
     }
+
 }

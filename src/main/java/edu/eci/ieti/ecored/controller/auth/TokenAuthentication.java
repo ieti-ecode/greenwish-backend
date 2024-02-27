@@ -1,9 +1,10 @@
 package edu.eci.ieti.ecored.controller.auth;
 
-import lombok.EqualsAndHashCode;
+import java.util.List;
+
 import org.springframework.security.authentication.AbstractAuthenticationToken;
 
-import java.util.List;
+import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = false)
 public class TokenAuthentication extends AbstractAuthenticationToken {

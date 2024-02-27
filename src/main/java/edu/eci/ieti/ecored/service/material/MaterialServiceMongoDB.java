@@ -3,10 +3,10 @@ package edu.eci.ieti.ecored.service.material;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import edu.eci.ieti.ecored.controller.material.MaterialDto;
+import edu.eci.ieti.ecored.exception.MaterialNotFoundException;
 import edu.eci.ieti.ecored.repository.MaterialRepository;
 import edu.eci.ieti.ecored.repository.document.Material;
 
@@ -15,7 +15,6 @@ public class MaterialServiceMongoDB implements MaterialService {
 
     private final MaterialRepository materialRepository;
 
-    @Autowired
     public MaterialServiceMongoDB(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;
     }
@@ -42,10 +41,15 @@ public class MaterialServiceMongoDB implements MaterialService {
 
     @Override
     public void update(MaterialDto material, String id) {
-        Material materialToUpdate = materialRepository.findById(id).get();
-        materialToUpdate.setName(material.getName());
-        materialToUpdate.setKiloValue(material.getKiloValue());
-        materialToUpdate.setDescription(material.getDescription());
+        Optional<Material> optionalMaterial = materialRepository.findById(id);
+        if (optionalMaterial.isPresent()) {
+            Material materialToUpdate = optionalMaterial.get();
+            materialToUpdate.setName(material.getName());
+            materialToUpdate.setKiloValue(material.getKiloValue());
+            materialToUpdate.setDescription(material.getDescription());
+        } else {
+            throw new MaterialNotFoundException();
+        }
     }
 
 }

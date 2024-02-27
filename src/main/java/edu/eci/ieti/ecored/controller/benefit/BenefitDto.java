@@ -1,11 +1,14 @@
 package edu.eci.ieti.ecored.controller.benefit;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class BenefitDto {
 
     private String name;
-
     private String description;
-
     private int value;
 
     public BenefitDto(String name, int value) {
@@ -13,18 +16,4 @@ public class BenefitDto {
         this.value = value;
     }
 
-    public BenefitDto() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public int getValue() {
-        return value;
-    }
 }

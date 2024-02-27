@@ -1,16 +1,9 @@
 package edu.eci.ieti.ecored.service;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
-import edu.eci.ieti.ecored.Service.BenefitServiceMongoDB;
-import edu.eci.ieti.ecored.Service.CompanyServiceMongoDB;
-import edu.eci.ieti.ecored.controller.benefit.BenefitDto;
-import edu.eci.ieti.ecored.controller.company.CompanyDto;
-import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
-import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
-import edu.eci.ieti.ecored.repository.BenefitRepository;
-import edu.eci.ieti.ecored.repository.CompanyRepository;
-import edu.eci.ieti.ecored.repository.document.Benefit;
-import edu.eci.ieti.ecored.repository.document.Company;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,9 +12,11 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import edu.eci.ieti.ecored.controller.company.CompanyDto;
+import edu.eci.ieti.ecored.exception.CompanyNotFoundException;
+import edu.eci.ieti.ecored.repository.CompanyRepository;
+import edu.eci.ieti.ecored.repository.document.Company;
+import edu.eci.ieti.ecored.service.company.CompanyServiceMongoDB;
 
 @SpringBootTest
 public class CompanyServiceMongoDBTest {
@@ -32,14 +27,12 @@ public class CompanyServiceMongoDBTest {
     @InjectMocks
     private CompanyServiceMongoDB companyServiceMongoDB;
 
-
     @Test
     @Order(1)
-    public void testFindAllCompanies(){
+    public void testFindAllCompanies() {
         List<Company> companiesListMock = Arrays.asList(
                 new Company("Exito", "3568456", "Cll325"),
-                new Company("GitHub", "654789", "CR5")
-        );
+                new Company("GitHub", "654789", "CR5"));
         Mockito.when(companyRepository.findAll()).thenReturn(companiesListMock);
         List<Company> companies = companyServiceMongoDB.all();
         Assertions.assertNotNull(companies);
@@ -68,4 +61,5 @@ public class CompanyServiceMongoDBTest {
         Assertions.assertNotNull(companySaved);
         Assertions.assertEquals("GitHub", companySaved.getName());
     }
+
 }

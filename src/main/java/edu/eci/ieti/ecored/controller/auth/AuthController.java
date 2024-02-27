@@ -1,10 +1,7 @@
 package edu.eci.ieti.ecored.controller.auth;
 
-import edu.eci.ieti.ecored.exception.InvalidCredentialsException;
-import edu.eci.ieti.ecored.repository.UserRepository;
-import edu.eci.ieti.ecored.repository.document.User;
-import edu.eci.ieti.ecored.security.jwt.JwtUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.Optional;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,7 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Optional;
+import edu.eci.ieti.ecored.exception.InvalidCredentialsException;
+import edu.eci.ieti.ecored.repository.UserRepository;
+import edu.eci.ieti.ecored.repository.document.User;
+import edu.eci.ieti.ecored.security.jwt.JwtUtils;
 
 @RestController
 @RequestMapping("/v1/auth")
@@ -21,7 +21,6 @@ public class AuthController {
     private final JwtUtils jwtService;
     private final UserRepository userRepository;
 
-    @Autowired
     public AuthController(JwtUtils jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
         this.userRepository = userRepository;

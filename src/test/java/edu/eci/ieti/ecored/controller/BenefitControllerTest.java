@@ -1,23 +1,21 @@
 package edu.eci.ieti.ecored.controller;
 
-import edu.eci.ieti.ecored.Service.BenefitService;
-import edu.eci.ieti.ecored.controller.benefit.BenefitController;
-import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
-import edu.eci.ieti.ecored.repository.document.Benefit;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.mockito.Mockito.when;
+
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.Mockito.when;
+import edu.eci.ieti.ecored.controller.benefit.BenefitController;
+import edu.eci.ieti.ecored.exception.BenefitNotFoundException;
+import edu.eci.ieti.ecored.repository.document.Benefit;
+import edu.eci.ieti.ecored.service.benefit.BenefitService;
 
 @ExtendWith(MockitoExtension.class)
 public class BenefitControllerTest {
@@ -40,4 +38,5 @@ public class BenefitControllerTest {
         assertNotNull(response.getBody());
         assertEquals("Carulla", response.getBody().getName());
     }
+
 }

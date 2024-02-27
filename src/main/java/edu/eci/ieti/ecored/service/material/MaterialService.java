@@ -17,5 +17,5 @@ public interface MaterialService {
     void deleteById(String id);
 
     void update(MaterialDto material, String id);
-    
+
 }

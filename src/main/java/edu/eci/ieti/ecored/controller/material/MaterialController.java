@@ -1,5 +1,7 @@
 package edu.eci.ieti.ecored.controller.material;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +22,7 @@ import edu.eci.ieti.ecored.service.material.MaterialService;
 @RestController
 @RequestMapping("/v1/materials")
 public class MaterialController {
-    
+
     private final MaterialService materialService;
 
     public MaterialController(@Autowired MaterialService materialService) {
@@ -28,45 +30,45 @@ public class MaterialController {
     }
 
     @GetMapping
-    public ResponseEntity<?> all() {
-        return new ResponseEntity<>(materialService.all(), HttpStatus.OK);
+    public ResponseEntity<List<Material>> all() {
+        return ResponseEntity.ok(materialService.all());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
+    public ResponseEntity<Material> findById(@PathVariable("id") String id) {
         Optional<Material> material = materialService.findById(id);
         if (material.isPresent()) {
-            return new ResponseEntity<>(material.get(), HttpStatus.OK);
+            return ResponseEntity.ok(material.get());
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody MaterialDto materialDto) {
-        Material material = new Material(materialDto);   
-        return new ResponseEntity<>(materialService.save(material), HttpStatus.CREATED);
+    public ResponseEntity<Material> create(@RequestBody MaterialDto materialDto) {
+        Material material = materialService.save(new Material(materialDto));
+        URI location = URI.create(String.format("/v1/materials/%s", material.getId()));
+        return ResponseEntity.created(location).body(material);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody MaterialDto materialDto) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") String id, @RequestBody MaterialDto materialDto) {
         Optional<Material> material = materialService.findById(id);
         if (material.isPresent()) {
             materialService.update(materialDto, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteMaterial(@PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> deleteMaterial(@PathVariable("id") String id) {
         if (materialService.findById(id).isPresent()) {
             materialService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-            
+            return ResponseEntity.notFound().build();
         }
     }
 }

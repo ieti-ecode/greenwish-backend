@@ -1,8 +1,9 @@
 package edu.eci.ieti.ecored.exception;
 
-public class BenefitNotFoundException extends Exception{
+public class BenefitNotFoundException extends Exception {
 
-    public BenefitNotFoundException(){
+    public BenefitNotFoundException() {
         super("Benefit not found");
     }
+
 }

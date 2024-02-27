@@ -1,5 +1,7 @@
 package edu.eci.ieti.ecored.controller.user;
 
+import java.net.URI;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,47 +30,46 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<?> all() {
-        return new ResponseEntity<>(userService.all(), HttpStatus.OK);
+    public ResponseEntity<List<User>> all() {
+        return ResponseEntity.ok(userService.all());
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> findById(@PathVariable("id") String id) {
+    public ResponseEntity<User> findById(@PathVariable("id") String id) {
         Optional<User> user = userService.findById(id);
         if (user.isPresent()) {
-            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+            return ResponseEntity.ok(user.get());
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
-    public ResponseEntity<?> create(@RequestBody UserDto userDto) {
-        return new ResponseEntity<>(userService.save(userDto), HttpStatus.CREATED);
+    public ResponseEntity<User> create(@RequestBody UserDto userDto) {
+        User userToSave = userService.save(userDto);
+        URI location = URI.create(String.format("/v1/users/%s", userToSave.getId()));
+        return ResponseEntity.created(location).body(userToSave);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> update(@PathVariable("id") String id, @RequestBody UserDto userDto) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         Optional<User> user = userService.findById(id);
         if (user.isPresent()) {
             userService.update(userDto, id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
+    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
         if (userService.findById(id).isPresent()) {
             userService.deleteById(id);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.notFound().build();
         }
     }
 
-
-    
-    
 }

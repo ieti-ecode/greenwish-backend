@@ -1,15 +1,16 @@
 package edu.eci.ieti.ecored.controller.company;
 
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Getter
+@NoArgsConstructor
 public class CompanyDto {
 
     private String name;
-
     private String description;
-
     private String phoneNumber;
-
     private String address;
-
     private String oppeningHours;
 
     public CompanyDto(String name, String phoneNumber, String address) {
@@ -18,26 +19,4 @@ public class CompanyDto {
         this.address = address;
     }
 
-    public CompanyDto() {
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public String getOppeningHours() {
-        return oppeningHours;
-    }
 }

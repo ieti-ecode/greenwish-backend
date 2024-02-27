@@ -5,8 +5,12 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import edu.eci.ieti.ecored.controller.material.MaterialDto;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Document
+@Data
+@NoArgsConstructor
 public class Material {
 
     @Id
@@ -14,13 +18,8 @@ public class Material {
 
     @Indexed(unique = true)
     private String name;
-
     private String description;
-
     private int kiloValue;
-
-    public Material() {
-    }
 
     public Material(String id, String name, String description, int kiloValue) {
         this.id = id;
@@ -39,29 +38,4 @@ public class Material {
         return id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public int getKiloValue() {
-        return kiloValue;
-    }
-
-    public void setKiloValue(int kiloValue) {
-        this.kiloValue = kiloValue;
-    }
 }
-
-
