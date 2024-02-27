@@ -12,6 +12,12 @@ public class CompanyDto {
 
     private String oppeningHours;
 
+    public CompanyDto(String name, String phoneNumber, String address) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
     public CompanyDto() {
     }
 

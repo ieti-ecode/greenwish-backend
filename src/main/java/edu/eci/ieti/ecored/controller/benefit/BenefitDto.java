@@ -8,6 +8,11 @@ public class BenefitDto {
 
     private int value;
 
+    public BenefitDto(String name, int value) {
+        this.name = name;
+        this.value = value;
+    }
+
     public BenefitDto() {
     }
 
