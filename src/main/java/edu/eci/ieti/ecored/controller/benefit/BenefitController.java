@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping( "/v1/benefit")
@@ -25,12 +26,17 @@ public class BenefitController {
     }
 
     @GetMapping("/{id}")
-    public Benefit findById(@PathVariable String id) throws BenefitNotFoundException {
-        return benefitService.findById(id);
+    public ResponseEntity<Benefit> findById(@PathVariable String id)  {
+        try{
+            return ResponseEntity.ok(benefitService.findById(id));
+        }catch (BenefitNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
     public ResponseEntity<Benefit> create(@RequestBody BenefitDto benefitDto){
+
         return ResponseEntity.ok(benefitService.create(benefitDto));
     }
 

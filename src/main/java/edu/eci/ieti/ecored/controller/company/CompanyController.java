@@ -25,8 +25,12 @@ public class CompanyController {
     }
 
     @GetMapping("/{id}")
-    public Company findById(@PathVariable String id) throws CompanyNotFoundException {
-        return companyService.findById(id);
+    public ResponseEntity<Company> findById(@PathVariable String id) throws CompanyNotFoundException {
+        try {
+            return ResponseEntity.ok(companyService.findById(id));
+        }catch (CompanyNotFoundException e){
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping
