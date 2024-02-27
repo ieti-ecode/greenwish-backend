@@ -10,6 +10,12 @@ public class MaterialDto {
     public MaterialDto() {
     }
 
+    public MaterialDto(String name, String description, int kiloValue) {
+        this.name = name;
+        this.description = description;
+        this.kiloValue = kiloValue;
+    }
+
     public String getName() {
         return name;
     }
