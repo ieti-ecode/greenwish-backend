@@ -25,11 +25,20 @@ public class User {
 
     }
 
+    public User(String id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
+        this.points = 0;
+    }
+
     public User(UserDto userDto) {
-        name = userDto.getName();
-        email = userDto.getEmail();
-        points = 0;
-        passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
+        this.id = null;
+        this.name = userDto.getName();
+        this.email = userDto.getEmail();
+        this.points = 0;
+        this.passwordHash = BCrypt.hashpw(userDto.getPassword(), BCrypt.gensalt());
     }
 
     public String getId() {
@@ -58,5 +67,9 @@ public class User {
 
     public String getPasswordHash() {
         return passwordHash;
+    }
+
+    public void setPasswordHash(String password) {
+        this.passwordHash = BCrypt.hashpw(password, BCrypt.gensalt());
     }
 }
