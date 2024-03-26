@@ -1,4 +1,4 @@
-package edu.eci.ieti.greenwish.controller;
+package edu.eci.ieti.greenwish.controller.benefit;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -12,13 +12,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
-import edu.eci.ieti.greenwish.controller.benefit.BenefitController;
 import edu.eci.ieti.greenwish.exception.BenefitNotFoundException;
 import edu.eci.ieti.greenwish.repository.document.Benefit;
 import edu.eci.ieti.greenwish.service.benefit.BenefitService;
 
 @ExtendWith(MockitoExtension.class)
-public class BenefitControllerTest {
+class BenefitControllerTest {
 
     @Mock
     private BenefitService benefitService;

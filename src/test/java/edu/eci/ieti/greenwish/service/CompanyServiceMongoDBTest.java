@@ -19,7 +19,7 @@ import edu.eci.ieti.greenwish.repository.document.Company;
 import edu.eci.ieti.greenwish.service.company.CompanyServiceMongoDB;
 
 @SpringBootTest
-public class CompanyServiceMongoDBTest {
+class CompanyServiceMongoDBTest {
 
     @Mock
     private CompanyRepository companyRepository;
@@ -29,7 +29,7 @@ public class CompanyServiceMongoDBTest {
 
     @Test
     @Order(1)
-    public void testFindAllCompanies() {
+    void testFindAllCompanies() {
         List<Company> companiesListMock = Arrays.asList(
                 new Company("Exito", "3568456", "Cll325"),
                 new Company("GitHub", "654789", "CR5"));
@@ -42,7 +42,7 @@ public class CompanyServiceMongoDBTest {
 
     @Test
     @Order(2)
-    public void testFindCompanyById() throws CompanyNotFoundException {
+    void testFindCompanyById() throws CompanyNotFoundException {
         Optional<Company> companyMock = Optional.of(new Company("GitHub", "654789", "CR5"));
         Mockito.when(companyRepository.findById("1")).thenReturn(companyMock);
         Company company = companyServiceMongoDB.findById("1");
@@ -52,7 +52,7 @@ public class CompanyServiceMongoDBTest {
 
     @Test
     @Order(3)
-    public void testCreateCompany() {
+    void testCreateCompany() {
         CompanyDto companyFromController = new CompanyDto("GitHub", "654789", "CR5");
         Company companyMock = new Company(companyFromController.getName(), companyFromController.getPhoneNumber(),
                 companyFromController.getAddress());
