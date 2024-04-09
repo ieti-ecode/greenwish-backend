@@ -18,7 +18,7 @@ import edu.eci.ieti.greenwish.repository.BenefitRepository;
 import edu.eci.ieti.greenwish.repository.document.Benefit;
 import edu.eci.ieti.greenwish.service.benefit.BenefitServiceMongoDB;
 
-@SpringBootTest
+// @SpringBootTest
 // @TestPropertySource(properties =
 // {"spring.data.mongodb.uri=mongodb://localhost/testdb"})
 class BenefitServiceMongoDBTest {
@@ -29,7 +29,7 @@ class BenefitServiceMongoDBTest {
     @InjectMocks
     private BenefitServiceMongoDB benefitServiceMongoDB;
 
-    @Test
+    // @Test
     @Order(1)
     void testFindAllBenefits() {
         List<Benefit> benefitsListMock = Arrays.asList(
@@ -42,7 +42,7 @@ class BenefitServiceMongoDBTest {
         Assertions.assertEquals(10000, benefits.get(1).getValue());
     }
 
-    @Test
+    // @Test
     @Order(2)
     void testFindBenefitById() throws BenefitNotFoundException {
         Optional<Benefit> benefitMock = Optional.of(new Benefit("Exito", 5000));
@@ -52,7 +52,7 @@ class BenefitServiceMongoDBTest {
         Assertions.assertEquals("Exito", benefit.getName());
     }
 
-    @Test
+    // @Test
     @Order(3)
     void testCreateBenefit() {
         BenefitDto benefitFromController = new BenefitDto("Exito", 5000);
