@@ -11,9 +11,9 @@ import lombok.EqualsAndHashCode;
 @Builder
 public class TokenAuthentication extends AbstractAuthenticationToken {
 
-    String token;
-    String subject;
-    List<String> roles;
+    private String token;
+    private String subject;
+    private List<String> roles;
 
     public TokenAuthentication(String token, String subject, List<String> roles) {
         super(null);
