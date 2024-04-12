@@ -1,10 +1,10 @@
 package edu.eci.ieti.greenwish.repository.document;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import edu.eci.ieti.greenwish.controller.company.CompanyDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
@@ -23,6 +23,14 @@ public class Company {
         this.name = name;
         this.phoneNumber = phoneNumber;
         this.address = address;
+    }
+
+    public Company(CompanyDto companyDto) {
+        this.name = companyDto.getName();
+        this.description = companyDto.getDescription();
+        this.phoneNumber = companyDto.getPhoneNumber();
+        this.address = companyDto.getAddress();
+        this.oppeningHours = companyDto.getOppeningHours();
     }
 
 }

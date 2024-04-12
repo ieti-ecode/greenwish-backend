@@ -1,14 +1,13 @@
 package edu.eci.ieti.greenwish.service.material;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import edu.eci.ieti.greenwish.controller.material.MaterialDto;
 import edu.eci.ieti.greenwish.exception.MaterialNotFoundException;
 import edu.eci.ieti.greenwish.repository.MaterialRepository;
 import edu.eci.ieti.greenwish.repository.document.Material;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class MaterialServiceMongoDB implements MaterialService {
@@ -20,13 +19,15 @@ public class MaterialServiceMongoDB implements MaterialService {
     }
 
     @Override
-    public Material save(Material material) {
-        return materialRepository.save(material);
+    public Material save(MaterialDto materialDto) {
+        return materialRepository.save(new Material(materialDto));
     }
 
     @Override
-    public Optional<Material> findById(String id) {
-        return materialRepository.findById(id);
+    public Material findById(String id) {
+        Optional<Material> optionalMaterial = materialRepository.findById(id);
+        if (optionalMaterial.isEmpty()) throw new MaterialNotFoundException();
+        return optionalMaterial.get();
     }
 
     @Override
@@ -36,20 +37,17 @@ public class MaterialServiceMongoDB implements MaterialService {
 
     @Override
     public void deleteById(String id) {
+        if (!materialRepository.existsById(id)) throw new MaterialNotFoundException();
         materialRepository.deleteById(id);
     }
 
     @Override
-    public void update(MaterialDto material, String id) {
-        Optional<Material> optionalMaterial = materialRepository.findById(id);
-        if (optionalMaterial.isPresent()) {
-            Material materialToUpdate = optionalMaterial.get();
-            materialToUpdate.setName(material.getName());
-            materialToUpdate.setKiloValue(material.getKiloValue());
-            materialToUpdate.setDescription(material.getDescription());
-        } else {
-            throw new MaterialNotFoundException();
-        }
+    public void update(MaterialDto materialDto, String id) {
+        Material materialToUpdate = findById(id);
+        materialToUpdate.setName(materialDto.getName());
+        materialToUpdate.setKiloValue(materialDto.getKiloValue());
+        materialToUpdate.setDescription(materialDto.getDescription());
+        materialRepository.save(materialToUpdate);
     }
 
 }

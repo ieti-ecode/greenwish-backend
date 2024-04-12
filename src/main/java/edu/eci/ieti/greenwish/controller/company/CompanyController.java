@@ -1,8 +1,11 @@
 package edu.eci.ieti.greenwish.controller.company;
 
+import java.net.URI;
 import java.util.List;
 
+import edu.eci.ieti.greenwish.exception.MaterialNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +21,7 @@ import edu.eci.ieti.greenwish.repository.document.Company;
 import edu.eci.ieti.greenwish.service.company.CompanyService;
 
 @RestController
-@RequestMapping("/v1/company")
+@RequestMapping("/v1/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -43,17 +46,29 @@ public class CompanyController {
 
     @PostMapping
     public ResponseEntity<Company> create(@RequestBody CompanyDto companyDto) {
-        return ResponseEntity.ok(companyService.create(companyDto));
+        Company savedCompany = companyService.save(companyDto);
+        URI location = URI.create(String.format("/v1/companies/%s", savedCompany.getId()));
+        return ResponseEntity.created(location).body(savedCompany);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Company> update(@RequestBody CompanyDto companyDto, @PathVariable String id) {
-        return ResponseEntity.ok(companyService.update(companyDto, id));
+    public ResponseEntity<HttpStatus> update(@RequestBody CompanyDto companyDto, @PathVariable String id) {
+        try {
+            companyService.update(companyDto, id);
+            return ResponseEntity.ok().build();
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable String id) {
-        return ResponseEntity.ok(companyService.deleteById(id));
+    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
+        try {
+            companyService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (CompanyNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

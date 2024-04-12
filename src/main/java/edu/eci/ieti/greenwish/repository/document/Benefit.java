@@ -1,10 +1,10 @@
 package edu.eci.ieti.greenwish.repository.document;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.Document;
-
+import edu.eci.ieti.greenwish.controller.benefit.BenefitDto;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
 @Data
@@ -20,6 +20,12 @@ public class Benefit {
     public Benefit(String name, int value) {
         this.name = name;
         this.value = value;
+    }
+
+    public Benefit(BenefitDto benefitDto) {
+        this.name = benefitDto.getName();
+        this.value = benefitDto.getValue();
+        this.description = benefitDto.getDescription();
     }
 
 }

@@ -1,14 +1,13 @@
 package edu.eci.ieti.greenwish.service.user;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.stereotype.Service;
-
 import edu.eci.ieti.greenwish.controller.user.UserDto;
 import edu.eci.ieti.greenwish.exception.UserNotFoundException;
 import edu.eci.ieti.greenwish.repository.UserRepository;
 import edu.eci.ieti.greenwish.repository.document.User;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceMongoDB implements UserService {
@@ -20,18 +19,22 @@ public class UserServiceMongoDB implements UserService {
     }
 
     @Override
-    public User save(UserDto user) {
-        return userRepository.save(new User(user));
+    public User save(UserDto userDto) {
+        return userRepository.save(new User(userDto));
     }
 
     @Override
-    public Optional<User> findById(String id) {
-        return userRepository.findById(id);
+    public User findById(String id) {
+        Optional<User> optionalUser = userRepository.findById(id);
+        if (optionalUser.isEmpty()) throw new UserNotFoundException();
+        return optionalUser.get();
     }
 
     @Override
-    public Optional<User> findByEmail(String email) {
-        return userRepository.findByEmail(email);
+    public User findByEmail(String email) {
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if (optionalUser.isEmpty()) throw new UserNotFoundException();
+        return optionalUser.get();
     }
 
     @Override
@@ -41,20 +44,16 @@ public class UserServiceMongoDB implements UserService {
 
     @Override
     public void deleteById(String id) {
+        if (!userRepository.existsById(id)) throw new UserNotFoundException();
         userRepository.deleteById(id);
     }
 
     @Override
-    public void update(UserDto user, String id) {
-        Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isPresent()) {
-            User userToUpdate = optionalUser.get();
-            userToUpdate.setName(user.getName());
-            userToUpdate.setEmail(user.getEmail());
-            userToUpdate.setPasswordHash(user.getPassword());
-        } else {
-            throw new UserNotFoundException();
-        }
+    public void update(UserDto userDto, String id) {
+        User userToUpdate = findById(id);
+        userToUpdate.setName(userDto.getName());
+        userToUpdate.setEmail(userDto.getEmail());
+        userToUpdate.setPasswordHash(userDto.getPassword());
+        userRepository.save(userToUpdate);
     }
-
 }
