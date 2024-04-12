@@ -47,7 +47,7 @@ class AuthControllerTest {
         // Arrange
         User user = new User("1", "Pepe", "pepe@pepe.com", "1234");
         Date expirationDate = new Date(System.currentTimeMillis() + Long.parseLong(expiration));
-        when(userService.findByEmail("pepe@pepe.com")).thenReturn(Optional.of(user));
+        when(userService.findByEmail("pepe@pepe.com")).thenReturn(user);
         String token = Jwts.builder().subject(user.getId())
                     .issuedAt(new Date(System.currentTimeMillis()))
                     .expiration(expirationDate)

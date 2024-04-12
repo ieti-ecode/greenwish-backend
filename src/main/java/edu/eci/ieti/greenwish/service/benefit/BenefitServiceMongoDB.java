@@ -1,15 +1,14 @@
 package edu.eci.ieti.greenwish.service.benefit;
 
-import java.util.List;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import edu.eci.ieti.greenwish.controller.benefit.BenefitDto;
 import edu.eci.ieti.greenwish.exception.BenefitNotFoundException;
 import edu.eci.ieti.greenwish.repository.BenefitRepository;
 import edu.eci.ieti.greenwish.repository.document.Benefit;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BenefitServiceMongoDB implements BenefitService {
@@ -21,18 +20,15 @@ public class BenefitServiceMongoDB implements BenefitService {
     }
 
     @Override
-    public Benefit create(BenefitDto benefitDto) {
-        return benefitRepository.save(new Benefit(benefitDto.getName(), benefitDto.getValue()));
+    public Benefit save(BenefitDto benefitDto) {
+        return benefitRepository.save(new Benefit(benefitDto));
     }
 
     @Override
     public Benefit findById(String id) throws BenefitNotFoundException {
         Optional<Benefit> optionalBenefit = benefitRepository.findById(id);
-        if (optionalBenefit.isPresent()) {
-            return optionalBenefit.get();
-        } else {
-            throw new BenefitNotFoundException();
-        }
+        if (optionalBenefit.isEmpty()) throw new BenefitNotFoundException();
+        return optionalBenefit.get();
     }
 
     @Override
@@ -41,24 +37,17 @@ public class BenefitServiceMongoDB implements BenefitService {
     }
 
     @Override
-    public boolean deleteById(String id) {
-        if (benefitRepository.existsById(id)) {
-            benefitRepository.deleteById(id);
-            return true;
-        }
-        return false;
+    public void deleteById(String id) {
+        if (!benefitRepository.existsById(id)) throw new BenefitNotFoundException();
+        benefitRepository.deleteById(id);
     }
 
     @Override
-    public Benefit update(BenefitDto benefitDto, String id) {
-        Optional<Benefit> optionalBenefit = benefitRepository.findById(id);
-        if (optionalBenefit.isPresent()) {
-            Benefit benefit = optionalBenefit.get();
-            benefit.setValue(benefit.getValue());
-            benefit.setName(benefit.getName());
-            benefit.setDescription(benefitDto.getDescription());
-            return benefit;
-        }
-        return null;
+    public void update(BenefitDto benefitDto, String id) {
+        Benefit benefitToUpdate = findById(id);
+        benefitToUpdate.setValue(benefitDto.getValue());
+        benefitToUpdate.setName(benefitDto.getName());
+        benefitToUpdate.setDescription(benefitDto.getDescription());
+        benefitRepository.save(benefitToUpdate);
     }
 }

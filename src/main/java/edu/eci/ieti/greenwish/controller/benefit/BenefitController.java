@@ -1,21 +1,16 @@
 package edu.eci.ieti.greenwish.controller.benefit;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import edu.eci.ieti.greenwish.exception.BenefitNotFoundException;
+import edu.eci.ieti.greenwish.exception.MaterialNotFoundException;
 import edu.eci.ieti.greenwish.repository.document.Benefit;
 import edu.eci.ieti.greenwish.service.benefit.BenefitService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/benefit")
@@ -43,17 +38,29 @@ public class BenefitController {
 
     @PostMapping
     public ResponseEntity<Benefit> create(@RequestBody BenefitDto benefitDto) {
-        return ResponseEntity.ok(benefitService.create(benefitDto));
+        Benefit savedBenefit = benefitService.save(benefitDto);
+        URI location = URI.create(String.format("/v1/company/%s", savedBenefit.getId()));
+        return ResponseEntity.created(location).body(savedBenefit);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Benefit> update(@RequestBody BenefitDto benefitDto, @PathVariable String id) {
-        return ResponseEntity.ok(benefitService.update(benefitDto, id));
+    public ResponseEntity<HttpStatus> update(@RequestBody BenefitDto benefitDto, @PathVariable String id) {
+        try {
+            benefitService.update(benefitDto, id);
+            return ResponseEntity.ok().build();
+        } catch (MaterialNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Boolean> delete(@PathVariable String id) {
-        return ResponseEntity.ok(benefitService.deleteById(id));
+    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
+        try {
+            benefitService.deleteById(id);
+            return ResponseEntity.noContent().build();
+        } catch (MaterialNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 }

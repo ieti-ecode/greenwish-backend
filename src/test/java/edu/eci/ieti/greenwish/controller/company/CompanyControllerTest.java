@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,7 +44,7 @@ class CompanyControllerTest {
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(2, response.getBody().size());
+        assertEquals(2, Objects.requireNonNull(response.getBody()).size());
         assertEquals("CR5", response.getBody().get(1).getAddress());
     }
 
@@ -58,7 +59,7 @@ class CompanyControllerTest {
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals("GitHub", response.getBody().getName());
+        assertEquals("GitHub", Objects.requireNonNull(response.getBody()).getName());
     }
 
     @Test
@@ -66,12 +67,12 @@ class CompanyControllerTest {
         // Arrangeg
         CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
         Company company = new Company(companyDto.getName(), companyDto.getPhoneNumber(), companyDto.getAddress());
-        when(companyService.create(companyDto)).thenReturn(company);
+        when(companyService.save(companyDto)).thenReturn(company);
         // Act
         ResponseEntity<Company> response = companyController.create(companyDto);
         // Assert
         assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
     @Test
@@ -80,9 +81,9 @@ class CompanyControllerTest {
         String companyId = "1";
         CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
         Company company = new Company(companyDto.getName(), companyDto.getPhoneNumber(), companyDto.getAddress());
-        when(companyService.update(companyDto, companyId)).thenReturn(company);
+        when(companyService.findById(companyId)).thenReturn(company);
         // Act
-        ResponseEntity<Company> response = companyController.update(companyDto, companyId);
+        ResponseEntity<HttpStatus> response = companyController.update(companyDto, companyId);
         // Assert
         assertNotNull(response);
         assertEquals(HttpStatus.OK, response.getStatusCode());
@@ -92,12 +93,12 @@ class CompanyControllerTest {
     void delete() {
         // Arrange
         String companyId = "1";
-        when(companyService.deleteById(companyId)).thenReturn(true);
+        Company company = new Company("GitHub", "654789", "CR5");
+        when(companyService.findById(companyId)).thenReturn(company);
         // Act
-        ResponseEntity<Boolean> response = companyController.delete(companyId);
+        ResponseEntity<HttpStatus> response = companyController.delete(companyId);
         // Assert
         assertNotNull(response);
-        assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertTrue(response.getBody());
+        assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
     }
 }

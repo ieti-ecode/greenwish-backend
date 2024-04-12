@@ -1,23 +1,15 @@
 package edu.eci.ieti.greenwish.controller.user;
 
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
-
+import edu.eci.ieti.greenwish.exception.MaterialNotFoundException;
+import edu.eci.ieti.greenwish.repository.document.User;
+import edu.eci.ieti.greenwish.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import edu.eci.ieti.greenwish.repository.document.User;
-import edu.eci.ieti.greenwish.service.user.UserService;
+import java.net.URI;
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1/users")
@@ -36,38 +28,36 @@ public class UserController {
 
     @GetMapping("{id}")
     public ResponseEntity<User> findById(@PathVariable("id") String id) {
-        Optional<User> user = userService.findById(id);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(user.get());
-        } else {
+        try {
+            return ResponseEntity.ok(userService.findById(id));
+        } catch (MaterialNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody UserDto userDto) {
-        User userToSave = userService.save(userDto);
-        URI location = URI.create(String.format("/v1/users/%s", userToSave.getId()));
-        return ResponseEntity.created(location).body(userToSave);
+        User savedUser = userService.save(userDto);
+        URI location = URI.create(String.format("/v1/users/%s", savedUser.getId()));
+        return ResponseEntity.created(location).body(savedUser);
     }
 
     @PutMapping("{id}")
     public ResponseEntity<HttpStatus> update(@PathVariable("id") String id, @RequestBody UserDto userDto) {
-        Optional<User> user = userService.findById(id);
-        if (user.isPresent()) {
+        try {
             userService.update(userDto, id);
             return ResponseEntity.ok().build();
-        } else {
+        } catch (MaterialNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<HttpStatus> deleteUser(@PathVariable("id") String id) {
-        if (userService.findById(id).isPresent()) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") String id) {
+        try {
             userService.deleteById(id);
-            return ResponseEntity.ok().build();
-        } else {
+            return ResponseEntity.noContent().build();
+        } catch (MaterialNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
