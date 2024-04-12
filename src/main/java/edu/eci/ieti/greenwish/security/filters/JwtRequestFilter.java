@@ -36,7 +36,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                 // Validate token and get claims
                 String userName = jwtUtils.getSubjectFromToken(token);
                 if (userName != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    List<String> roles = jwtUtils.getRolesFromToken(token);
+                    //List<String> roles = jwtUtils.getRolesFromToken(token);
                     TokenAuthentication tokenAuthentication = TokenAuthentication.builder()
                             .token(token).subject(userName).build();
                     SecurityContextHolder.getContext().setAuthentication(tokenAuthentication);
