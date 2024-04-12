@@ -25,7 +25,7 @@ public class CompanyServiceMongoDB implements CompanyService {
     }
 
     @Override
-    public Company findById(String id) throws CompanyNotFoundException {
+    public Company findById(String id) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
         if (optionalCompany.isEmpty()) throw new CompanyNotFoundException();
         return optionalCompany.get();

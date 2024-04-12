@@ -1,6 +1,7 @@
 package edu.eci.ieti.greenwish.controller.user;
 
 import edu.eci.ieti.greenwish.exception.MaterialNotFoundException;
+import edu.eci.ieti.greenwish.exception.UserNotFoundException;
 import edu.eci.ieti.greenwish.repository.document.User;
 import edu.eci.ieti.greenwish.service.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +31,7 @@ public class UserController {
     public ResponseEntity<User> findById(@PathVariable("id") String id) {
         try {
             return ResponseEntity.ok(userService.findById(id));
-        } catch (MaterialNotFoundException e) {
+        } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -47,7 +48,7 @@ public class UserController {
         try {
             userService.update(userDto, id);
             return ResponseEntity.ok().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -57,7 +58,7 @@ public class UserController {
         try {
             userService.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (UserNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

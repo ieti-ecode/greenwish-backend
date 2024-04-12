@@ -19,8 +19,7 @@ public class Material {
     private String description;
     private int kiloValue;
 
-    public Material(String id, String name, String description, int kiloValue) {
-        this.id = id;
+    public Material(String name, String description, int kiloValue) {
         this.name = name;
         this.description = description;
         this.kiloValue = kiloValue;

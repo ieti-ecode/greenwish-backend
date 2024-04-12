@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/benefit")
+@RequestMapping("/v1/benefits")
 public class BenefitController {
 
     private final BenefitService benefitService;
@@ -39,7 +39,7 @@ public class BenefitController {
     @PostMapping
     public ResponseEntity<Benefit> create(@RequestBody BenefitDto benefitDto) {
         Benefit savedBenefit = benefitService.save(benefitDto);
-        URI location = URI.create(String.format("/v1/company/%s", savedBenefit.getId()));
+        URI location = URI.create(String.format("/v1/benefits/%s", savedBenefit.getId()));
         return ResponseEntity.created(location).body(savedBenefit);
     }
 
@@ -48,7 +48,7 @@ public class BenefitController {
         try {
             benefitService.update(benefitDto, id);
             return ResponseEntity.ok().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (BenefitNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -58,7 +58,7 @@ public class BenefitController {
         try {
             benefitService.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (BenefitNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

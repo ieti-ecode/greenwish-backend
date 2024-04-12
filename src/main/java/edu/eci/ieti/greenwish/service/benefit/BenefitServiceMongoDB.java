@@ -25,7 +25,7 @@ public class BenefitServiceMongoDB implements BenefitService {
     }
 
     @Override
-    public Benefit findById(String id) throws BenefitNotFoundException {
+    public Benefit findById(String id) {
         Optional<Benefit> optionalBenefit = benefitRepository.findById(id);
         if (optionalBenefit.isEmpty()) throw new BenefitNotFoundException();
         return optionalBenefit.get();

@@ -21,7 +21,7 @@ import edu.eci.ieti.greenwish.repository.document.Company;
 import edu.eci.ieti.greenwish.service.company.CompanyService;
 
 @RestController
-@RequestMapping("/v1/company")
+@RequestMapping("/v1/companies")
 public class CompanyController {
 
     private final CompanyService companyService;
@@ -47,7 +47,7 @@ public class CompanyController {
     @PostMapping
     public ResponseEntity<Company> create(@RequestBody CompanyDto companyDto) {
         Company savedCompany = companyService.save(companyDto);
-        URI location = URI.create(String.format("/v1/company/%s", savedCompany.getId()));
+        URI location = URI.create(String.format("/v1/companies/%s", savedCompany.getId()));
         return ResponseEntity.created(location).body(savedCompany);
     }
 
@@ -56,7 +56,7 @@ public class CompanyController {
         try {
             companyService.update(companyDto, id);
             return ResponseEntity.ok().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (CompanyNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -66,7 +66,7 @@ public class CompanyController {
         try {
             companyService.deleteById(id);
             return ResponseEntity.noContent().build();
-        } catch (MaterialNotFoundException e) {
+        } catch (CompanyNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
