@@ -12,21 +12,41 @@ import org.springframework.web.bind.annotation.*;
 import java.net.URI;
 import java.util.List;
 
+/**
+ * This class represents the controller for managing benefits in the system.
+ * It handles HTTP requests related to benefits and interacts with the BenefitService.
+ */
 @RestController
 @RequestMapping("/v1/benefits")
 public class BenefitController {
 
     private final BenefitService benefitService;
 
+    /**
+     * Constructs a new BenefitController with the specified BenefitService.
+     * 
+     * @param benefitService the BenefitService to be used by the controller
+     */
     public BenefitController(@Autowired BenefitService benefitService) {
         this.benefitService = benefitService;
     }
 
+    /**
+     * Retrieves all benefits.
+     * 
+     * @return a list of all benefits
+     */
     @GetMapping
     public List<Benefit> all() {
         return benefitService.all();
     }
 
+    /**
+     * Retrieves a benefit by its ID.
+     * 
+     * @param id the ID of the benefit to retrieve
+     * @return the ResponseEntity containing the retrieved benefit, or a not found response if the benefit does not exist
+     */
     @GetMapping("/{id}")
     public ResponseEntity<Benefit> findById(@PathVariable String id) {
         try {
@@ -36,6 +56,12 @@ public class BenefitController {
         }
     }
 
+    /**
+     * Creates a new benefit.
+     * 
+     * @param benefitDto the DTO containing the data for the new benefit
+     * @return the ResponseEntity containing the created benefit and its location, or an error response if the creation fails
+     */
     @PostMapping
     public ResponseEntity<Benefit> create(@RequestBody BenefitDto benefitDto) {
         Benefit savedBenefit = benefitService.save(benefitDto);
@@ -43,6 +69,13 @@ public class BenefitController {
         return ResponseEntity.created(location).body(savedBenefit);
     }
 
+    /**
+     * Updates an existing benefit.
+     * 
+     * @param benefitDto the DTO containing the updated data for the benefit
+     * @param id the ID of the benefit to update
+     * @return the ResponseEntity indicating the success of the update, or a not found response if the benefit does not exist
+     */
     @PutMapping("/{id}")
     public ResponseEntity<HttpStatus> update(@RequestBody BenefitDto benefitDto, @PathVariable String id) {
         try {
@@ -53,6 +86,12 @@ public class BenefitController {
         }
     }
 
+    /**
+     * Deletes a benefit by its ID.
+     * 
+     * @param id the ID of the benefit to delete
+     * @return the ResponseEntity indicating the success of the deletion, or a not found response if the benefit does not exist
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
         try {

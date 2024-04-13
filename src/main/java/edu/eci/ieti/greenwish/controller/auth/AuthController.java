@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The AuthController class handles authentication-related operations.
+ * It provides endpoints for user login and token generation.
+ */
 @RestController
 @RequestMapping("/v1/auth")
 public class AuthController {
@@ -19,11 +23,27 @@ public class AuthController {
     private final JwtUtils jwtService;
     private final UserServiceMongoDB userService;
 
+    /**
+     * Constructs a new AuthController with the specified JwtUtils and
+     * UserServiceMongoDB instances.
+     *
+     * @param jwtService  the JwtUtils instance used for JWT token generation and
+     *                    validation
+     * @param userService the UserServiceMongoDB instance used for user-related
+     *                    operations
+     */
     public AuthController(JwtUtils jwtService, UserServiceMongoDB userService) {
         this.jwtService = jwtService;
         this.userService = userService;
     }
 
+    /**
+     * Authenticates a user by checking their credentials and generating a JWT
+     * token.
+     *
+     * @param loginDto The login credentials of the user.
+     * @return A ResponseEntity containing the generated JWT token.
+     */
     @PostMapping
     public ResponseEntity<TokenDto> login(@RequestBody LoginDto loginDto) {
         try {

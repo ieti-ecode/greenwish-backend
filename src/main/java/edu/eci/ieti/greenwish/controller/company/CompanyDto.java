@@ -3,6 +3,9 @@ package edu.eci.ieti.greenwish.controller.company;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a company data transfer object.
+ */
 @Getter
 @NoArgsConstructor
 public class CompanyDto {
@@ -13,6 +16,14 @@ public class CompanyDto {
     private String address;
     private String oppeningHours;
 
+    /**
+     * Constructs a new CompanyDto object with the specified name, phone number, and
+     * address.
+     *
+     * @param name        the name of the company
+     * @param phoneNumber the phone number of the company
+     * @param address     the address of the company
+     */
     public CompanyDto(String name, String phoneNumber, String address) {
         this.name = name;
         this.phoneNumber = phoneNumber;

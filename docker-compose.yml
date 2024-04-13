@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+
+    greenwishbackend:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        container_name: web
+        environment:
+            - MONGODB_URI=mongodb://monguito:27017/greenwish
+        ports:
+            - "8080:8080"
+        depends_on:
+            - mongodatabase
+
+    mongodatabase:
+        image: mongo:3.6.1
+        container_name: monguito
+        volumes:
+            - mongodb:/data/db
+            - mongodb_config:/data/configdb
+        ports:
+            - 27017:27017
+        command: mongod
+
+volumes:
+    mongodb:
+    mongodb_config:

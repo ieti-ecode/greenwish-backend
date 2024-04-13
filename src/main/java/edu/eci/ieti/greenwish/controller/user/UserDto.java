@@ -4,6 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * Represents a user data transfer object (DTO) that contains information about
+ * a user.
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
