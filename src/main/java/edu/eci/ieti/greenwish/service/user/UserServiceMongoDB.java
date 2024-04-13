@@ -9,11 +9,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class implements the UserService interface using MongoDB as the data
+ * source.
+ * It provides methods to save, retrieve, update, and delete User objects.
+ */
 @Service
 public class UserServiceMongoDB implements UserService {
 
     private final UserRepository userRepository;
 
+    /**
+     * Constructs a new instance of the UserServiceMongoDB class.
+     *
+     * @param userRepository the UserRepository instance to be used by the service
+     */
     public UserServiceMongoDB(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
@@ -26,14 +36,16 @@ public class UserServiceMongoDB implements UserService {
     @Override
     public User findById(String id) {
         Optional<User> optionalUser = userRepository.findById(id);
-        if (optionalUser.isEmpty()) throw new UserNotFoundException();
+        if (optionalUser.isEmpty())
+            throw new UserNotFoundException();
         return optionalUser.get();
     }
 
     @Override
     public User findByEmail(String email) {
         Optional<User> optionalUser = userRepository.findByEmail(email);
-        if (optionalUser.isEmpty()) throw new UserNotFoundException();
+        if (optionalUser.isEmpty())
+            throw new UserNotFoundException();
         return optionalUser.get();
     }
 
@@ -44,7 +56,8 @@ public class UserServiceMongoDB implements UserService {
 
     @Override
     public void deleteById(String id) {
-        if (!userRepository.existsById(id)) throw new UserNotFoundException();
+        if (!userRepository.existsById(id))
+            throw new UserNotFoundException();
         userRepository.deleteById(id);
     }
 
@@ -56,4 +69,5 @@ public class UserServiceMongoDB implements UserService {
         userToUpdate.setPasswordHash(userDto.getPassword());
         userRepository.save(userToUpdate);
     }
+
 }

@@ -10,11 +10,21 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the BenefitService interface that uses MongoDB as the data
+ * source.
+ */
 @Service
 public class BenefitServiceMongoDB implements BenefitService {
 
     private final BenefitRepository benefitRepository;
 
+    /**
+     * Constructs a new instance of the BenefitServiceMongoDB class.
+     *
+     * @param benefitRepository the repository for accessing benefit data in the
+     *                          MongoDB database
+     */
     public BenefitServiceMongoDB(@Autowired BenefitRepository benefitRepository) {
         this.benefitRepository = benefitRepository;
     }
@@ -27,7 +37,8 @@ public class BenefitServiceMongoDB implements BenefitService {
     @Override
     public Benefit findById(String id) {
         Optional<Benefit> optionalBenefit = benefitRepository.findById(id);
-        if (optionalBenefit.isEmpty()) throw new BenefitNotFoundException();
+        if (optionalBenefit.isEmpty())
+            throw new BenefitNotFoundException();
         return optionalBenefit.get();
     }
 
@@ -38,7 +49,8 @@ public class BenefitServiceMongoDB implements BenefitService {
 
     @Override
     public void deleteById(String id) {
-        if (!benefitRepository.existsById(id)) throw new BenefitNotFoundException();
+        if (!benefitRepository.existsById(id))
+            throw new BenefitNotFoundException();
         benefitRepository.deleteById(id);
     }
 
@@ -50,4 +62,5 @@ public class BenefitServiceMongoDB implements BenefitService {
         benefitToUpdate.setDescription(benefitDto.getDescription());
         benefitRepository.save(benefitToUpdate);
     }
+
 }

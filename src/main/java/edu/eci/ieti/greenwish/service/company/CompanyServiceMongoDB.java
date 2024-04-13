@@ -10,11 +10,20 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Implementation of the CompanyService interface that uses MongoDB as the
+ * underlying data store.
+ */
 @Service
 public class CompanyServiceMongoDB implements CompanyService {
 
     private final CompanyRepository companyRepository;
 
+    /**
+     * Constructs a new instance of the CompanyServiceMongoDB class.
+     *
+     * @param companyRepository the repository used for accessing company data
+     */
     public CompanyServiceMongoDB(@Autowired CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
@@ -27,7 +36,8 @@ public class CompanyServiceMongoDB implements CompanyService {
     @Override
     public Company findById(String id) {
         Optional<Company> optionalCompany = companyRepository.findById(id);
-        if (optionalCompany.isEmpty()) throw new CompanyNotFoundException();
+        if (optionalCompany.isEmpty())
+            throw new CompanyNotFoundException();
         return optionalCompany.get();
     }
 
@@ -38,7 +48,8 @@ public class CompanyServiceMongoDB implements CompanyService {
 
     @Override
     public void deleteById(String id) {
-        if (!companyRepository.existsById(id)) throw new CompanyNotFoundException();
+        if (!companyRepository.existsById(id))
+            throw new CompanyNotFoundException();
         companyRepository.deleteById(id);
     }
 

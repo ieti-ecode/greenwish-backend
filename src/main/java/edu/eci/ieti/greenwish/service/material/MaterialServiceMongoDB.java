@@ -9,11 +9,24 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This class implements the MaterialService interface using MongoDB as the data
+ * source.
+ * It provides methods to save, find, retrieve all, delete by ID, and update
+ * materials.
+ */
 @Service
 public class MaterialServiceMongoDB implements MaterialService {
 
     private final MaterialRepository materialRepository;
 
+    /**
+     * Constructs a new MaterialServiceMongoDB instance with the specified
+     * MaterialRepository.
+     *
+     * @param materialRepository the MaterialRepository to be used for database
+     *                           operations
+     */
     public MaterialServiceMongoDB(MaterialRepository materialRepository) {
         this.materialRepository = materialRepository;
     }
@@ -26,7 +39,8 @@ public class MaterialServiceMongoDB implements MaterialService {
     @Override
     public Material findById(String id) {
         Optional<Material> optionalMaterial = materialRepository.findById(id);
-        if (optionalMaterial.isEmpty()) throw new MaterialNotFoundException();
+        if (optionalMaterial.isEmpty())
+            throw new MaterialNotFoundException();
         return optionalMaterial.get();
     }
 
@@ -37,7 +51,8 @@ public class MaterialServiceMongoDB implements MaterialService {
 
     @Override
     public void deleteById(String id) {
-        if (!materialRepository.existsById(id)) throw new MaterialNotFoundException();
+        if (!materialRepository.existsById(id))
+            throw new MaterialNotFoundException();
         materialRepository.deleteById(id);
     }
 
