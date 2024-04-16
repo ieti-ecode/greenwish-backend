@@ -1,4 +1,4 @@
-FROM openjdk:17
+FROM openjdk:23-ea-17-jdk-oraclelinux8
 
 WORKDIR /usrapp/bin
 
