@@ -1,5 +1,7 @@
 package edu.eci.ieti.greenwish;
 
+import org.bson.BsonBinarySubType;
+import org.bson.types.Binary;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -37,6 +39,7 @@ public class EcoredApplication {
                 admin.setEmail("greenwish@ecode.com");
                 admin.setPasswordHash(passwordEncoder.encode("admin"));
                 admin.setRole(Role.ADMINISTRATOR.getName());
+                admin.setImage(new Binary(BsonBinarySubType.BINARY, userService.loadDefaultImageBytes()));
                 admin.setPoints(10000);
                 userRepository.save(admin);
             }

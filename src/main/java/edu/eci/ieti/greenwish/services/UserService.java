@@ -1,6 +1,9 @@
 package edu.eci.ieti.greenwish.services;
 
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -8,6 +11,7 @@ import org.bson.BsonBinarySubType;
 import org.bson.types.Binary;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ResourceUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
@@ -41,6 +45,11 @@ public class UserService implements CrudService<User, UserDto, String, UserNotFo
                 .build();
         if (Boolean.TRUE.equals(userDto.getIsCompany()))
             user.setRole(Role.COMPANY.getName());
+        try {
+            user.setImage(new Binary(BsonBinarySubType.BINARY, loadDefaultImageBytes()));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return userRepository.save(user);
     }
 
@@ -85,9 +94,12 @@ public class UserService implements CrudService<User, UserDto, String, UserNotFo
 
     public byte[] getImage(String id) {
         User user = findById(id);
-        if (user.getImage() == null)
-            throw new UserNotFoundException(id);
         return user.getImage().getData();
+    }
+
+    public byte[] loadDefaultImageBytes() throws IOException {
+        Path path = Paths.get(ResourceUtils.getFile("classpath:static/default-profile.png").toURI());
+        return Files.readAllBytes(path);
     }
 
     @Override
