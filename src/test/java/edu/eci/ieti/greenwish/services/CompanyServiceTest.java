@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.ieti.greenwish.exceptions.CompanyNotFoundException;
-import edu.eci.ieti.greenwish.models.Company;
+import edu.eci.ieti.greenwish.models.domain.Company;
 import edu.eci.ieti.greenwish.models.dto.CompanyDto;
 import edu.eci.ieti.greenwish.repositories.CompanyRepository;
 
@@ -37,7 +37,7 @@ class CompanyServiceTest {
     @BeforeEach
     void setup() {
         company = new Company(null, "Exito", null, null, "Cll325", null);
-        Company company2 = new Company("2", "GitHub", "Empresa", "654789", "CR5", "8");
+        Company company2 = new Company("2", "GitHub", "Empresa", "654789", "CR5", null);
         companies = List.of(company, company2);
     }
 

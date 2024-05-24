@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.ieti.greenwish.exceptions.BenefitNotFoundException;
-import edu.eci.ieti.greenwish.models.Benefit;
+import edu.eci.ieti.greenwish.models.domain.Benefit;
 import edu.eci.ieti.greenwish.models.dto.BenefitDto;
 import edu.eci.ieti.greenwish.repositories.BenefitRepository;
 
@@ -36,8 +36,8 @@ class BenefitServiceTest {
 
     @BeforeEach
     void setup() {
-        benefit = new Benefit(null, "Carulla", null, 10000);
-        Benefit benefit2 = new Benefit(null, "Falabella", null, 20000);
+        benefit = new Benefit(null, "Carulla", null, 10000, null);
+        Benefit benefit2 = new Benefit(null, "Falabella", null, 20000, null);
         benefits = List.of(benefit, benefit2);
     }
 

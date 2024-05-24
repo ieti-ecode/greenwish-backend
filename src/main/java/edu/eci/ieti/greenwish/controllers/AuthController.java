@@ -1,7 +1,6 @@
 package edu.eci.ieti.greenwish.controllers;
 
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,8 +8,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import edu.eci.ieti.greenwish.exceptions.InvalidCredentialsException;
-import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
 import edu.eci.ieti.greenwish.models.dto.LoginDto;
 import edu.eci.ieti.greenwish.models.dto.TokenDto;
 import edu.eci.ieti.greenwish.services.AuthService;
@@ -36,14 +33,7 @@ public class AuthController {
      */
     @PostMapping("/signin")
     public ResponseEntity<TokenDto> signIn(@RequestBody LoginDto loginDto) {
-        try {
-            TokenDto tokenDto = authService.signIn(loginDto);
-            return ResponseEntity.ok(tokenDto);
-        } catch (UserNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (InvalidCredentialsException e) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-        }
+        return ResponseEntity.ok(authService.signIn(loginDto));
     }
 
     /**
@@ -53,7 +43,7 @@ public class AuthController {
      * @return a ResponseEntity containing the token DTO
      */
     @PostMapping("/signout")
-    public ResponseEntity<TokenDto> signOut(@RequestHeader(name = HttpHeaders.AUTHORIZATION) String jwt) {
+    public ResponseEntity<TokenDto> signOut(@RequestHeader(HttpHeaders.AUTHORIZATION) String jwt) {
         return ResponseEntity.ok(authService.signOut(jwt));
     }
 

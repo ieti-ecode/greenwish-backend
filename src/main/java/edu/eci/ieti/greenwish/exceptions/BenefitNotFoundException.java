@@ -3,13 +3,13 @@ package edu.eci.ieti.greenwish.exceptions;
 /**
  * Exception thrown when a benefit is not found.
  */
-public class BenefitNotFoundException extends RuntimeException {
+public class BenefitNotFoundException extends ResourceNotFoundException {
 
     /**
      * Constructs a new BenefitNotFoundException with a default error message.
      */
-    public BenefitNotFoundException() {
-        super("Benefit not found");
+    public BenefitNotFoundException(Object fieldValue) {
+        super("Benefit", "id", fieldValue);
     }
-
+    
 }

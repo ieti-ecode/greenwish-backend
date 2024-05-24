@@ -1,6 +1,7 @@
 package edu.eci.ieti.greenwish.controllers;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 import java.util.Date;
@@ -15,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 
 import edu.eci.ieti.greenwish.exceptions.InvalidCredentialsException;
 import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
-import edu.eci.ieti.greenwish.models.Role;
-import edu.eci.ieti.greenwish.models.User;
+import edu.eci.ieti.greenwish.models.domain.Role;
+import edu.eci.ieti.greenwish.models.domain.User;
 import edu.eci.ieti.greenwish.models.dto.LoginDto;
 import edu.eci.ieti.greenwish.models.dto.TokenDto;
 import edu.eci.ieti.greenwish.services.AuthService;
@@ -43,7 +44,7 @@ class AuthControllerTest {
 
     @Test
     void login() {
-        User user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0);
+        User user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0, null);
         Date now = new Date();
         Date expirationDate = new Date(now.getTime() + Long.parseLong(expiration));
         String token = Jwts.builder()
@@ -53,7 +54,7 @@ class AuthControllerTest {
                 .signWith(Keys.hmacShaKeyFor(secret.getBytes()))
                 .compact();
         LoginDto loginDto = new LoginDto("pepe@pepe.com", "1234");
-        TokenDto tokenDto = new TokenDto(token);
+        TokenDto tokenDto = new TokenDto(token, null);
         when(authService.signIn(loginDto)).thenReturn(tokenDto);
         ResponseEntity<TokenDto> response = authController.signIn(loginDto);
         assertEquals(tokenDto, response.getBody());
@@ -64,22 +65,24 @@ class AuthControllerTest {
     void loginInvalidCredentials() {
         LoginDto loginDto = new LoginDto("pepe@pepe.com", "1234");
         when(authService.signIn(loginDto)).thenThrow(new InvalidCredentialsException());
-        ResponseEntity<TokenDto> response = authController.signIn(loginDto);
-        assertEquals(HttpStatus.UNAUTHORIZED, response.getStatusCode());
+        assertThrows(InvalidCredentialsException.class, () -> {
+            authController.signIn(loginDto);
+        });
     }
 
     @Test
     void loginUserNotFound() {
         LoginDto loginDto = new LoginDto("pepe@pepe.com", "1234");
-        when(authService.signIn(loginDto)).thenThrow(new UserNotFoundException());
-        ResponseEntity<TokenDto> response = authController.signIn(loginDto);
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
+        when(authService.signIn(loginDto)).thenThrow(new UserNotFoundException("1"));
+        assertThrows(UserNotFoundException.class, () -> {
+            authController.signIn(loginDto);
+        });
     }
 
     @Test
     void signOut() {
         String token = "Bearer XXXXXXX";
-        TokenDto tokenDto = new TokenDto("Removed session");
+        TokenDto tokenDto = new TokenDto("Removed session", null);
         when(authService.signOut(token)).thenReturn(tokenDto);
         ResponseEntity<TokenDto> response = authController.signOut(token);
         assertEquals(tokenDto, response.getBody());

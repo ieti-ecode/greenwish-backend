@@ -19,8 +19,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
-import edu.eci.ieti.greenwish.models.Role;
-import edu.eci.ieti.greenwish.models.User;
+import edu.eci.ieti.greenwish.models.domain.Role;
+import edu.eci.ieti.greenwish.models.domain.User;
 import edu.eci.ieti.greenwish.models.dto.UserDto;
 import edu.eci.ieti.greenwish.repositories.UserRepository;
 
@@ -41,8 +41,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0);
-        User user2 = new User("2", "Juan", "juan@juan.com", "5678", Role.CUSTOMER.getName(), 0);
+        user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0, null);
+        User user2 = new User("2", "Juan", "juan@juan.com", "5678", Role.CUSTOMER.getName(), 0, null);
         users = List.of(user, user2);
     }
 
@@ -76,7 +76,7 @@ class UserServiceTest {
     @Test
     void testSaveNewUser() {
         UserDto userDto = new UserDto("Pepe", "pepe@pepe.com", "1234", false);
-        User user = new User(null, "Pepe", "pepe@pepe.com", null, Role.CUSTOMER.getName(), 0);
+        User user = new User(null, "Pepe", "pepe@pepe.com", null, Role.CUSTOMER.getName(), 0, null);
         when(userRepository.save(user)).thenReturn(user);
         User savedUser = userService.save(userDto);
         assertNotNull(savedUser);

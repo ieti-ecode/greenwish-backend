@@ -18,7 +18,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import edu.eci.ieti.greenwish.models.Role;
+import edu.eci.ieti.greenwish.models.domain.Role;
 import edu.eci.ieti.greenwish.security.JwtRequestFilter;
 import lombok.RequiredArgsConstructor;
 
@@ -48,25 +48,25 @@ public class SecurityConfig {
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .cors(Customizer.withDefaults())
-                .csrf(Customizer.withDefaults())
+                .csrf(csrf -> csrf.disable())
                 .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.GET, "/benefits").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.GET, "/companies").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.GET, "/materials").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.GET, "/benefits", "/benefits/**").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.GET, "/companies", "/companies/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/materials", "/materials/**").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
                         .requestMatchers(HttpMethod.GET, "/users").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
                         .requestMatchers(HttpMethod.POST, "/benefits").hasRole(Role.ADMINISTRATOR.getName())
                         .requestMatchers(HttpMethod.POST, "/companies").hasRole(Role.ADMINISTRATOR.getName())
                         .requestMatchers(HttpMethod.POST, "/materials").hasRole(Role.ADMINISTRATOR.getName())
                         .requestMatchers(HttpMethod.POST, "/users", "/auth/**").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/benefits").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.PUT, "/companies").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.PUT, "/materials").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.PUT, "/users").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.DELETE, "/benefits").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.DELETE, "/companies").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.DELETE, "/materials").hasRole(Role.ADMINISTRATOR.getName())
-                        .requestMatchers(HttpMethod.DELETE, "/users").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.PUT, "/benefits/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.PUT, "/companies/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.PUT, "/materials/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.PUT, "/users/**").hasAnyRole(Role.CUSTOMER.getName(), Role.COMPANY.getName(), Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.DELETE, "/benefits/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.DELETE, "/companies/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.DELETE, "/materials/**").hasRole(Role.ADMINISTRATOR.getName())
+                        .requestMatchers(HttpMethod.DELETE, "/users/**").hasRole(Role.ADMINISTRATOR.getName())
                         .requestMatchers("/swagger-ui.html", "/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
