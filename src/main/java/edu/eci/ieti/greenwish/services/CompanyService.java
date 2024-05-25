@@ -31,6 +31,7 @@ public class CompanyService implements CrudService<Company, CompanyDto, String, 
         Company company = Company.builder()
                 .name(companyDto.getName())
                 .description(companyDto.getDescription())
+                .phoneNumber(companyDto.getPhoneNumber())
                 .address(companyDto.getAddress())
                 .build();
         return companyRepository.save(company);
