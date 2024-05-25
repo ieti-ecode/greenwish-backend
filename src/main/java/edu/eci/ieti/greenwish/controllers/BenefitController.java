@@ -98,7 +98,7 @@ public class BenefitController {
      * @throws ImageReadException If an error occurs while reading the image file.
      */
     @PostMapping("/{id}/image")
-    public ResponseEntity<String> uploadImage(@PathVariable("id") String id,@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<String> uploadImage(@PathVariable("id") String id, @RequestParam("image") MultipartFile image) {
         try {
             benefitService.uploadImage(id, image);
             return ResponseEntity.ok().build();
@@ -116,7 +116,7 @@ public class BenefitController {
      *         found response if the benefit does not exist
      */
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody BenefitDto benefitDto, @PathVariable String id) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") String id, @RequestBody BenefitDto benefitDto) {
         benefitService.update(benefitDto, id);
         return ResponseEntity.ok().build();
     }
@@ -129,7 +129,7 @@ public class BenefitController {
      *         found response if the benefit does not exist
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") String id) {
         benefitService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

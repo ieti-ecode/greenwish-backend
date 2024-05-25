@@ -102,7 +102,7 @@ public class CompanyController {
      * @throws ImageReadException If an error occurs while reading the image file.
      */
     @PostMapping("/{id}/image")
-    public ResponseEntity<String> uploadImage(@PathVariable("id") String id,@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<String> uploadImage(@PathVariable("id") String id, @RequestParam("image") MultipartFile image) {
         try {
             companyService.uploadImage(id, image);
             return ResponseEntity.ok().build();
@@ -119,7 +119,7 @@ public class CompanyController {
      * @return A ResponseEntity with the HTTP status of the update operation.
      */
     @PutMapping("/{id}")
-    public ResponseEntity<HttpStatus> update(@RequestBody CompanyDto companyDto, @PathVariable String id) {
+    public ResponseEntity<HttpStatus> update(@PathVariable("id") String id, @RequestBody CompanyDto companyDto) {
         companyService.update(companyDto, id);
         return ResponseEntity.ok().build();
     }
@@ -132,7 +132,7 @@ public class CompanyController {
      *         the deletion
      */
     @DeleteMapping("/{id}")
-    public ResponseEntity<HttpStatus> delete(@PathVariable String id) {
+    public ResponseEntity<HttpStatus> delete(@PathVariable("id") String id) {
         companyService.deleteById(id);
         return ResponseEntity.noContent().build();
     }

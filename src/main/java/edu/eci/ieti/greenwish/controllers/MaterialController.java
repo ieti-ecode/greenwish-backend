@@ -96,7 +96,7 @@ public class MaterialController {
      * @throws ImageReadException If an error occurs while reading the image file.
      */
     @PostMapping("/{id}/image")
-    public ResponseEntity<String> uploadImage(@PathVariable("id") String id,@RequestParam("image") MultipartFile image) {
+    public ResponseEntity<String> uploadImage(@PathVariable("id") String id, @RequestParam("image") MultipartFile image) {
         try {
             materialService.uploadImage(id, image);
             return ResponseEntity.ok().build();
