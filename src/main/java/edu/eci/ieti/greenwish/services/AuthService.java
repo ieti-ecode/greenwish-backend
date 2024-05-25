@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.eci.ieti.greenwish.exceptions.InvalidCredentialsException;
 import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
-import edu.eci.ieti.greenwish.models.User;
+import edu.eci.ieti.greenwish.models.domain.User;
 import edu.eci.ieti.greenwish.models.dto.LoginDto;
 import edu.eci.ieti.greenwish.models.dto.TokenDto;
 import edu.eci.ieti.greenwish.repositories.UserRepository;
@@ -36,10 +36,10 @@ public class AuthService {
     public TokenDto signIn(LoginDto loginDto) throws UserNotFoundException, InvalidCredentialsException {
         Optional<User> user = userRepository.findByEmail(loginDto.getEmail());
         if (user.isEmpty())
-            throw new UserNotFoundException();
+            throw new UserNotFoundException(loginDto.getEmail());
         if (!passwordEncoder.matches(loginDto.getPassword(), user.get().getPasswordHash()))
             throw new InvalidCredentialsException();
-        return new TokenDto(jwtUtils.generateAccessToken(user.get()));
+        return new TokenDto(jwtUtils.generateAccessToken(user.get()), user.get().getId());
     }
 
     /**
@@ -49,7 +49,7 @@ public class AuthService {
      * @return the signed out token.
      */
     public TokenDto signOut(String jwt) {
-        return new TokenDto(jwtUtils.deleteAccessToken(jwt));
+        return new TokenDto(jwtUtils.deleteAccessToken(jwt), null);
     }
 
 }

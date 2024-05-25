@@ -3,7 +3,7 @@ package edu.eci.ieti.greenwish.repositories;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.eci.ieti.greenwish.models.Material;
+import edu.eci.ieti.greenwish.models.domain.Material;
 
 /**
  * This interface represents a repository for managing Material objects in the

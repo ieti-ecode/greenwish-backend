@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 
-import edu.eci.ieti.greenwish.models.User;
+import edu.eci.ieti.greenwish.models.domain.User;
 
 /**
  * This interface represents a repository for managing User entities in the
@@ -22,5 +22,7 @@ public interface UserRepository extends MongoRepository<User, String> {
      *         an empty Optional if not found.
      */
     Optional<User> findByEmail(String email);
+
+    Optional<User> findByRole(String name);
 
 }

@@ -28,8 +28,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
-import edu.eci.ieti.greenwish.models.Role;
-import edu.eci.ieti.greenwish.models.User;
+import edu.eci.ieti.greenwish.models.domain.Role;
+import edu.eci.ieti.greenwish.models.domain.User;
 import edu.eci.ieti.greenwish.models.dto.UserDto;
 import edu.eci.ieti.greenwish.services.UserService;
 
@@ -50,8 +50,8 @@ class UserControllerTest {
     @BeforeEach
     public void setup() {
         mockMvc = standaloneSetup(userController).build();
-        user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0);
-        User user2 = new User("2", "Juan", "juan@juan.com", "5678", Role.CUSTOMER.getName(), 0);
+        user = new User("1", "Pepe", "pepe@pepe.com", "1234", Role.CUSTOMER.getName(), 0, null);
+        User user2 = new User("2", "Juan", "juan@juan.com", "5678", Role.CUSTOMER.getName(), 0, null);
         users = List.of(user, user2);
     }
 
@@ -85,7 +85,7 @@ class UserControllerTest {
     @Test
     void testFindByIdNotExistingBenefit() throws Exception {
         String id = "511";
-        when(userService.findById(id)).thenThrow(new UserNotFoundException());
+        when(userService.findById(id)).thenThrow(new UserNotFoundException(id));
         mockMvc.perform(get(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(userService, times(1)).findById(id);
@@ -126,7 +126,7 @@ class UserControllerTest {
         String json = "{\"name\":\"" + userDto.getName() + "\",\"email\":\"" + userDto.getEmail()
                 + "\",\"password\":\""
                 + userDto.getPassword() + "\"}";
-        doThrow(new UserNotFoundException()).when(userService).update(any(), eq(id));
+        doThrow(new UserNotFoundException(id)).when(userService).update(any(), eq(id));
         mockMvc.perform(put(BASE_URL + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -145,7 +145,7 @@ class UserControllerTest {
     @Test
     void testDeleteNotExistingCompany() throws Exception {
         String id = "511";
-        doThrow(new UserNotFoundException()).when(userService).deleteById(id);
+        doThrow(new UserNotFoundException(id)).when(userService).deleteById(id);
         mockMvc.perform(delete(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(userService, times(1)).deleteById(id);

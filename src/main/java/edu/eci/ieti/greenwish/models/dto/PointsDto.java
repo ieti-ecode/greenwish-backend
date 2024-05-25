@@ -5,16 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Represents a company data transfer object.
+ * Represents a data transfer object for points.
  */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CompanyDto {
+public class PointsDto {
 
-    private String name;
-    private String description;
-    private String phoneNumber;
-    private String address;
+    private int points;
 
 }

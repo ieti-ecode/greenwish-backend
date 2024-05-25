@@ -3,13 +3,13 @@ package edu.eci.ieti.greenwish.exceptions;
 /**
  * Exception thrown when a company is not found.
  */
-public class CompanyNotFoundException extends RuntimeException {
+public class CompanyNotFoundException extends ResourceNotFoundException {
 
     /**
      * Constructs a new CompanyNotFoundException with a default error message.
      */
-    public CompanyNotFoundException() {
-        super("Company not found");
+    public CompanyNotFoundException(Object fieldValue) {
+        super("Company", "id", fieldValue);
     }
 
 }

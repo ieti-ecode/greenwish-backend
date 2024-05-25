@@ -1,4 +1,4 @@
-package edu.eci.ieti.greenwish.models;
+package edu.eci.ieti.greenwish.models.domain;
 
 import lombok.Getter;
 

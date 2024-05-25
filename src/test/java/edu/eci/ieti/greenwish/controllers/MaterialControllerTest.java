@@ -28,7 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.eci.ieti.greenwish.exceptions.MaterialNotFoundException;
-import edu.eci.ieti.greenwish.models.Material;
+import edu.eci.ieti.greenwish.models.domain.Material;
 import edu.eci.ieti.greenwish.models.dto.MaterialDto;
 import edu.eci.ieti.greenwish.services.MaterialService;
 
@@ -49,8 +49,8 @@ class MaterialControllerTest {
     @BeforeEach
     public void setup() {
         mockMvc = standaloneSetup(materialController).build();
-        material = new Material("1", "Material 1", "Description 1", 1);
-        Material material2 = new Material("2", "Material 2", "Description 2", 2);
+        material = new Material("1", "Material 1", "Description 1", 1, null);
+        Material material2 = new Material("2", "Material 2", "Description 2", 2, null);
         materials = List.of(material, material2);
     }
 
@@ -84,7 +84,7 @@ class MaterialControllerTest {
     @Test
     void testFindByIdNotExistingMaterial() throws Exception {
         String id = "511";
-        when(materialService.findById(id)).thenThrow(new MaterialNotFoundException());
+        when(materialService.findById(id)).thenThrow(new MaterialNotFoundException(id));
         mockMvc.perform(get(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(materialService, times(1)).findById(id);
@@ -125,7 +125,7 @@ class MaterialControllerTest {
         String json = "{\"name\":\"" + materialDto.getName() + "\",\"description\":\""
                 + materialDto.getDescription()
                 + "\",\"address\":" + materialDto.getKiloValue() + "}";
-        doThrow(new MaterialNotFoundException()).when(materialService).update(any(), eq(id));
+        doThrow(new MaterialNotFoundException(id)).when(materialService).update(any(), eq(id));
         mockMvc.perform(put(BASE_URL + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -144,7 +144,7 @@ class MaterialControllerTest {
     @Test
     void testDeleteNotExistingCompany() throws Exception {
         String id = "511";
-        doThrow(new MaterialNotFoundException()).when(materialService).deleteById(id);
+        doThrow(new MaterialNotFoundException(id)).when(materialService).deleteById(id);
         mockMvc.perform(delete(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(materialService, times(1)).deleteById(id);
