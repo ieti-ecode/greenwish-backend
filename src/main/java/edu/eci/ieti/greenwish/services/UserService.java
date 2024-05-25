@@ -18,6 +18,7 @@ import edu.eci.ieti.greenwish.exceptions.UserNotFoundException;
 import edu.eci.ieti.greenwish.exceptions.UserNotMatchException;
 import edu.eci.ieti.greenwish.models.domain.Role;
 import edu.eci.ieti.greenwish.models.domain.User;
+import edu.eci.ieti.greenwish.models.dto.PointsDto;
 import edu.eci.ieti.greenwish.models.dto.UserDto;
 import edu.eci.ieti.greenwish.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -63,6 +64,14 @@ public class UserService implements CrudService<User, UserDto, String, UserNotFo
         userToUpdate.setEmail(userDto.getEmail());
         userToUpdate.setPasswordHash(passwordEncoder.encode(userDto.getPassword()));
         userToUpdate.setRole(role);
+        userRepository.save(userToUpdate);
+    }
+
+    public void updatePoints(PointsDto pointsDto, String id) {
+        User userToUpdate = findById(id);
+        if (!userToUpdate.getId().equals(id))
+            throw new UserNotMatchException();
+        userToUpdate.setPoints(pointsDto.getPoints());
         userRepository.save(userToUpdate);
     }
 

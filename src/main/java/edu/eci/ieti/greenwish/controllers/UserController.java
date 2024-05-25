@@ -21,6 +21,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import edu.eci.ieti.greenwish.exceptions.ImageReadException;
 import edu.eci.ieti.greenwish.models.domain.User;
+import edu.eci.ieti.greenwish.models.dto.PointsDto;
 import edu.eci.ieti.greenwish.models.dto.UserDto;
 import edu.eci.ieti.greenwish.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -116,6 +117,20 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<String> update(@PathVariable("id") String id, @RequestBody UserDto userDto) {
         userService.update(userDto, id);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * Updates the points of a user with the given ID.
+     *
+     * @param id      The ID of the user to update.
+     * @param pointsDto The updated user information.
+     * @return A ResponseEntity with a status code indicating the success of the
+     *         update operation.
+     */
+    @PutMapping("/{id}/points")
+    public ResponseEntity<String> updatePoints(@PathVariable("id") String id, @RequestBody PointsDto pointsDto) {
+        userService.updatePoints(pointsDto, id);
         return ResponseEntity.ok().build();
     }
 
