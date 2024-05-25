@@ -76,8 +76,8 @@ class UserServiceTest {
     @Test
     void testSaveNewUser() {
         UserDto userDto = new UserDto("Pepe", "pepe@pepe.com", "1234", false);
-        User user = new User(null, "Pepe", "pepe@pepe.com", null, Role.CUSTOMER.getName(), 0, null);
-        when(userRepository.save(user)).thenReturn(user);
+        User user1 = new User(null, "Pepe", "pepe@pepe.com", null, Role.CUSTOMER.getName(), 0, null);
+        when(userRepository.save(user1)).thenReturn(user1);
         User savedUser = userService.save(userDto);
         assertNotNull(savedUser);
         verify(userRepository, times(1)).save(user);

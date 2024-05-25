@@ -92,7 +92,7 @@ class CompanyControllerTest {
 
     @Test
     void testSaveNewCompany() throws Exception {
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         when(companyService.save(any())).thenReturn(company);
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
@@ -107,7 +107,7 @@ class CompanyControllerTest {
     @Test
     void testUpdateExistingCompany() throws Exception {
         String id = "1";
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
                 + "\",\"address\":\"" + companyDto.getAddress() + "\"}";
@@ -121,7 +121,7 @@ class CompanyControllerTest {
     @Test
     void testUpdateNotExistingCompany() throws Exception {
         String id = "511";
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
                 + "\",\"address\":\"" + companyDto.getAddress() + "\"}";

@@ -88,7 +88,7 @@ class BenefitControllerTest {
 
     @Test
     void testSaveNewBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         when(benefitService.save(any())).thenReturn(benefit);
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
         mockMvc.perform(post(BASE_URL)
@@ -100,7 +100,7 @@ class BenefitControllerTest {
 
     @Test
     void testUpdateExistingBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         String id = "1";
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
         mockMvc.perform(put(BASE_URL + id)
@@ -112,7 +112,7 @@ class BenefitControllerTest {
 
     @Test
     void testUpdateNotExistingBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         String id = "511";
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
         doThrow(new BenefitNotFoundException(id)).when(benefitService).update(any(), eq(id));

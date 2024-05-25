@@ -36,7 +36,7 @@ class CompanyServiceTest {
 
     @BeforeEach
     void setup() {
-        company = new Company(null, "Exito", null, null, "Cll325", null);
+        company = new Company(null, "Exito", "Company", null, "Cll325", null);
         Company company2 = new Company("2", "GitHub", "Empresa", "654789", "CR5", null);
         companies = List.of(company, company2);
     }
@@ -70,7 +70,7 @@ class CompanyServiceTest {
 
     @Test
     void testSaveNewCompany() {
-        CompanyDto companyDto = new CompanyDto("Exito", "3568456", "Cll325");
+        CompanyDto companyDto = new CompanyDto("Exito", "Company", "3568456", "Cll325");
         when(companyRepository.save(company)).thenReturn(company);
         Company savesCompany = companyService.save(companyDto);
         verify(companyRepository, times(1)).save(company);
@@ -80,7 +80,7 @@ class CompanyServiceTest {
     @Test
     void testUpdateExistingBenefit() {
         String id = "1";
-        CompanyDto companyDto = new CompanyDto("Exito", "3568456", "Cll325");
+        CompanyDto companyDto = new CompanyDto("Exito", "Company", "3568456", "Cll325");
         Company company = new Company(null, "Exito", null, "3568456", "Cll325", null);
         when(companyRepository.findById(id)).thenReturn(Optional.of(company));
         companyService.update(companyDto, id);
@@ -94,7 +94,7 @@ class CompanyServiceTest {
     @Test
     void testUpdateNotExistingBenefit() {
         String id = "1";
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         when(companyRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(CompanyNotFoundException.class, () -> companyService.update(companyDto, id));
         verify(companyRepository, times(1)).findById(id);
