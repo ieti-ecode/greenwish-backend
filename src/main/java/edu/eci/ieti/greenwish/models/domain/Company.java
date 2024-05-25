@@ -1,7 +1,7 @@
-package edu.eci.ieti.greenwish.models;
+package edu.eci.ieti.greenwish.models.domain;
 
+import org.bson.types.Binary;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.AllArgsConstructor;
@@ -11,18 +11,17 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@Document
-@AllArgsConstructor
 @NoArgsConstructor
-public class User {
+@AllArgsConstructor
+@Document(collection = "companies")
+public class Company {
 
     @Id
     private String id;
     private String name;
-    @Indexed(unique = true)
-    private String email;
-    private String passwordHash;
-    private String role;
-    private int points;
+    private String description;
+    private String phoneNumber;
+    private String address;
+    private Binary image;
 
 }

@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.ieti.greenwish.exceptions.BenefitNotFoundException;
 import edu.eci.ieti.greenwish.exceptions.MaterialNotFoundException;
-import edu.eci.ieti.greenwish.models.Material;
+import edu.eci.ieti.greenwish.models.domain.Material;
 import edu.eci.ieti.greenwish.models.dto.MaterialDto;
 import edu.eci.ieti.greenwish.repositories.MaterialRepository;
 
@@ -37,8 +37,8 @@ class MaterialServiceTest {
 
     @BeforeEach
     void setUp() {
-        material = new Material(null, "Material 1", "Description 1", 1);
-        Material material2 = new Material("2", "Material 2", "Description 2", 2);
+        material = new Material(null, "Material 1", "Description 1", 1, null);
+        Material material2 = new Material("2", "Material 2", "Description 2", 2, null);
         materials = List.of(material, material2);
     }
 

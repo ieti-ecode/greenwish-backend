@@ -28,7 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.eci.ieti.greenwish.exceptions.CompanyNotFoundException;
-import edu.eci.ieti.greenwish.models.Company;
+import edu.eci.ieti.greenwish.models.domain.Company;
 import edu.eci.ieti.greenwish.models.dto.CompanyDto;
 import edu.eci.ieti.greenwish.services.CompanyService;
 
@@ -49,8 +49,8 @@ class CompanyControllerTest {
     @BeforeEach
     public void setup() {
         mockMvc = standaloneSetup(companyController).build();
-        company = new Company("1", "Exito", "Empresa", "3568456", "Cll325", "8");
-        Company company2 = new Company("2", "GitHub", "Empresa", "654789", "CR5", "8");
+        company = new Company("1", "Exito", "Empresa", "3568456", "Cll325", null);
+        Company company2 = new Company("2", "GitHub", "Empresa", "654789", "CR5", null);
         companies = List.of(company, company2);
     }
 
@@ -84,7 +84,7 @@ class CompanyControllerTest {
     @Test
     void testFindByIdNotExistingBenefit() throws Exception {
         String id = "511";
-        when(companyService.findById(id)).thenThrow(new CompanyNotFoundException());
+        when(companyService.findById(id)).thenThrow(new CompanyNotFoundException(id));
         mockMvc.perform(get(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(companyService, times(1)).findById(id);
@@ -92,7 +92,7 @@ class CompanyControllerTest {
 
     @Test
     void testSaveNewCompany() throws Exception {
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         when(companyService.save(any())).thenReturn(company);
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
@@ -107,7 +107,7 @@ class CompanyControllerTest {
     @Test
     void testUpdateExistingCompany() throws Exception {
         String id = "1";
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
                 + "\",\"address\":\"" + companyDto.getAddress() + "\"}";
@@ -121,11 +121,11 @@ class CompanyControllerTest {
     @Test
     void testUpdateNotExistingCompany() throws Exception {
         String id = "511";
-        CompanyDto companyDto = new CompanyDto("GitHub", "654789", "CR5");
+        CompanyDto companyDto = new CompanyDto("GitHub", "Company", "654789", "CR5");
         String json = "{\"name\":\"" + companyDto.getName() + "\",\"phoneNumber\":\""
                 + companyDto.getPhoneNumber()
                 + "\",\"address\":\"" + companyDto.getAddress() + "\"}";
-        doThrow(new CompanyNotFoundException()).when(companyService).update(any(), eq(id));
+        doThrow(new CompanyNotFoundException(id)).when(companyService).update(any(), eq(id));
         mockMvc.perform(put(BASE_URL + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -144,7 +144,7 @@ class CompanyControllerTest {
     @Test
     void testDeleteNotExistingCompany() throws Exception {
         String id = "511";
-        doThrow(new CompanyNotFoundException()).when(companyService).deleteById(id);
+        doThrow(new CompanyNotFoundException(id)).when(companyService).deleteById(id);
         mockMvc.perform(delete(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(companyService, times(1)).deleteById(id);

@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import edu.eci.ieti.greenwish.exceptions.BenefitNotFoundException;
-import edu.eci.ieti.greenwish.models.Benefit;
+import edu.eci.ieti.greenwish.models.domain.Benefit;
 import edu.eci.ieti.greenwish.models.dto.BenefitDto;
 import edu.eci.ieti.greenwish.repositories.BenefitRepository;
 
@@ -36,8 +36,8 @@ class BenefitServiceTest {
 
     @BeforeEach
     void setup() {
-        benefit = new Benefit(null, "Carulla", null, 10000);
-        Benefit benefit2 = new Benefit(null, "Falabella", null, 20000);
+        benefit = new Benefit(null, "Carulla", "Bono", 10000, null);
+        Benefit benefit2 = new Benefit(null, "Falabella", "Bono", 20000, null);
         benefits = List.of(benefit, benefit2);
     }
 
@@ -70,7 +70,7 @@ class BenefitServiceTest {
 
     @Test
     void testSaveNewBenefit() {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         when(benefitRepository.save(benefit)).thenReturn(benefit);
         Benefit savedBenefit = benefitService.save(benefitDto);
         assertNotNull(savedBenefit);
@@ -81,7 +81,7 @@ class BenefitServiceTest {
     @Test
     void testUpdateExistingBenefit() {
         String id = "1";
-        BenefitDto benefitDto = new BenefitDto("Exito", 5000);
+        BenefitDto benefitDto = new BenefitDto("Exito", "Bono", 5000);
         when(benefitRepository.findById(id)).thenReturn(Optional.of(benefit));
         benefitService.update(benefitDto, id);
         verify(benefitRepository, times(1)).findById(id);
@@ -93,7 +93,7 @@ class BenefitServiceTest {
     @Test
     void testUpdateNotExistingBenefit() {
         String id = "1";
-        BenefitDto benefitDto = new BenefitDto("Exito", 5000);
+        BenefitDto benefitDto = new BenefitDto("Exito", "Bono", 5000);
         when(benefitRepository.findById(id)).thenReturn(Optional.empty());
         assertThrows(BenefitNotFoundException.class, () -> benefitService.update(benefitDto, id));
         verify(benefitRepository, times(1)).findById(id);

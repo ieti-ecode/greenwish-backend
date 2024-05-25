@@ -28,7 +28,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import edu.eci.ieti.greenwish.exceptions.BenefitNotFoundException;
-import edu.eci.ieti.greenwish.models.Benefit;
+import edu.eci.ieti.greenwish.models.domain.Benefit;
 import edu.eci.ieti.greenwish.models.dto.BenefitDto;
 import edu.eci.ieti.greenwish.services.BenefitService;
 
@@ -49,8 +49,8 @@ class BenefitControllerTest {
     @BeforeEach
     public void setup() {
         mockMvc = standaloneSetup(benefitController).build();
-        benefit = new Benefit("1", "Carulla", "Bono", 10000);
-        Benefit benefit2 = new Benefit("2", "Falabella", "Bono", 20000);
+        benefit = new Benefit("1", "Carulla", "Bono", 10000, null);
+        Benefit benefit2 = new Benefit("2", "Falabella", "Bono", 20000, null);
         benefits = List.of(benefit, benefit2);
     }
 
@@ -81,14 +81,14 @@ class BenefitControllerTest {
     @Test
     void testFindByIdNotExistingBenefit() throws Exception {
         String id = "511";
-        when(benefitService.findById(id)).thenThrow(new BenefitNotFoundException());
+        when(benefitService.findById(id)).thenThrow(new BenefitNotFoundException(id));
         mockMvc.perform(get(BASE_URL + id)).andExpect(status().isNotFound());
         verify(benefitService, times(1)).findById(id);
     }
 
     @Test
     void testSaveNewBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         when(benefitService.save(any())).thenReturn(benefit);
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
         mockMvc.perform(post(BASE_URL)
@@ -100,7 +100,7 @@ class BenefitControllerTest {
 
     @Test
     void testUpdateExistingBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         String id = "1";
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
         mockMvc.perform(put(BASE_URL + id)
@@ -112,10 +112,10 @@ class BenefitControllerTest {
 
     @Test
     void testUpdateNotExistingBenefit() throws Exception {
-        BenefitDto benefitDto = new BenefitDto("Carulla", 10000);
+        BenefitDto benefitDto = new BenefitDto("Carulla", "Bono", 10000);
         String id = "511";
         String json = "{\"name\":\"" + benefitDto.getName() + "\",\"value\":" + benefitDto.getValue() + "}";
-        doThrow(new BenefitNotFoundException()).when(benefitService).update(any(), eq(id));
+        doThrow(new BenefitNotFoundException(id)).when(benefitService).update(any(), eq(id));
         mockMvc.perform(put(BASE_URL + id)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(json))
@@ -134,7 +134,7 @@ class BenefitControllerTest {
     @Test
     void testDeleteNotExistingBenefit() throws Exception {
         String id = "511";
-        doThrow(new BenefitNotFoundException()).when(benefitService).deleteById(id);
+        doThrow(new BenefitNotFoundException(id)).when(benefitService).deleteById(id);
         mockMvc.perform(delete(BASE_URL + id))
                 .andExpect(status().isNotFound());
         verify(benefitService, times(1)).deleteById(id);
