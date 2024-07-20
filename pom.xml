@@ -7,7 +7,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.0</version>
-        <relativePath />
+        <relativePath/>
     </parent>
     <groupId>edu.eci.ieti</groupId>
     <artifactId>greenwish</artifactId>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
-            <version>0.12.5</version>
+            <version>0.12.6</version>
         </dependency>
         <!-- SPRING WEB -->
         <dependency>
